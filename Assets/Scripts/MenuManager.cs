@@ -14,26 +14,42 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     InputField emailForPasswordReset;
 
-    Hashtable cred = new Hashtable();
+    Hashtable emailPassword = new Hashtable();
+    Hashtable emailUsername = new Hashtable();
+
+    [SerializeField]
+    GameObject perfilPage1;
+
+    [SerializeField]
+    Text welcomeUsername;
 
     // Start is called before the first frame update
     void Awake()
     {
-        cred.Add("pedro@gmail.com", "123");
+        emailPassword.Add("pedro@gmail.com", "123");
+        emailUsername.Add("pedro@gmail.com", "Pedro");
+
+        emailPassword.Add("bruno@gmail.com", "123");
+        emailUsername.Add("bruno@gmail.com", "Bruno");
+
+        emailPassword.Add("mauricio@gmail.com", "123");
+        emailUsername.Add("mauricio@gmail.com", "Maurício");
 
         regPage1.SetActive(true);
         regPage2.SetActive(false);
         regPage3.SetActive(false);
+        perfilPage1.SetActive(false);
     }
 
     public void enter()
     {
-        if (cred.ContainsKey(emailCredential.text))
+        if (emailPassword.ContainsKey(emailCredential.text))
         {
-            if ((string)cred[emailCredential.text] == (string)passwordCredential.text) {
+            if ((string)emailPassword[emailCredential.text] == (string)passwordCredential.text) {
                 regPage1.SetActive(false);
                 regPage2.SetActive(false);
                 regPage3.SetActive(false);
+                EnterUserProperties((string)emailUsername[emailCredential.text]);
             }
         }
         
@@ -61,5 +77,11 @@ public class MenuManager : MonoBehaviour
         regPage1.SetActive(true);
         regPage2.SetActive(false);
         regPage3.SetActive(false);
+    }
+
+    public void EnterUserProperties(string username)
+    {
+        welcomeUsername.text = string.Concat(welcomeUsername.text, username);
+        perfilPage1.SetActive(true);
     }
 }
