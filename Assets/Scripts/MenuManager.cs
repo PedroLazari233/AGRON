@@ -23,6 +23,28 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     Text welcomeUsername;
 
+    [SerializeField]
+    Text textErrorCredentials;
+
+    [SerializeField]
+    Text textErrorNoEmail;
+
+    [SerializeField]
+    GameObject propertiesPage1;
+
+    [SerializeField]
+    Animator dataVisualizationLayer;
+
+    [SerializeField]
+    List<GameObject> areaButtons;
+
+    Hashtable umidadeAr = new Hashtable();
+    Hashtable umidadeSolo = new Hashtable();
+    Hashtable mmChovidos = new Hashtable();
+
+    [SerializeField]
+    Text umAr, umSolo, mmCho;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -35,28 +57,72 @@ public class MenuManager : MonoBehaviour
         emailPassword.Add("mauricio@gmail.com", "123");
         emailUsername.Add("mauricio@gmail.com", "Maurício");
 
+        umidadeAr.Add("AreaButton", "90%");
+        umidadeAr.Add("AreaButton(1)", "25%");
+        umidadeAr.Add("AreaButton(2)", "46%");
+        umidadeAr.Add("AreaButton(3)", "79%");
+        umidadeAr.Add("AreaButton(4)", "12%");
+        umidadeAr.Add("AreaButton(5)", "88%");
+        umidadeAr.Add("AreaButton(6)", "54%");
+
+        umidadeSolo.Add("AreaButton", "45%");
+        umidadeSolo.Add("AreaButton(1)", "10%");
+        umidadeSolo.Add("AreaButton(2)", "20%");
+        umidadeSolo.Add("AreaButton(3)", "54%");
+        umidadeSolo.Add("AreaButton(4)", "06%");
+        umidadeSolo.Add("AreaButton(5)", "65%");
+        umidadeSolo.Add("AreaButton(6)", "90%");
+
+        mmChovidos.Add("AreaButton", "96 mm");
+        mmChovidos.Add("AreaButton(1)", "12 mm");
+        mmChovidos.Add("AreaButton(2)", "30 mm");
+        mmChovidos.Add("AreaButton(3)", "76 mm");
+        mmChovidos.Add("AreaButton(4)", "10 mm");
+        mmChovidos.Add("AreaButton(5)", "107 mm");
+        mmChovidos.Add("AreaButton(6)", "46 mm");
+
         regPage1.SetActive(true);
         regPage2.SetActive(false);
         regPage3.SetActive(false);
         perfilPage1.SetActive(false);
+        propertiesPage1.SetActive(false);
     }
 
     public void enter()
     {
-        if (emailPassword.ContainsKey(emailCredential.text))
+        if(emailCredential.text == "" || emailCredential.text == null || passwordCredential.text == "" || passwordCredential.text == null)
         {
-            if ((string)emailPassword[emailCredential.text] == (string)passwordCredential.text) {
-                regPage1.SetActive(false);
-                regPage2.SetActive(false);
-                regPage3.SetActive(false);
-                EnterUserProperties((string)emailUsername[emailCredential.text]);
+            textErrorCredentials.gameObject.SetActive(true);
+        }
+        else
+        {
+            textErrorCredentials.gameObject.SetActive(false);
+            if (emailPassword.ContainsKey(emailCredential.text))
+            {
+                if ((string)emailPassword[emailCredential.text] == (string)passwordCredential.text)
+                {
+                    regPage1.SetActive(false);
+                    regPage2.SetActive(false);
+                    regPage3.SetActive(false);
+                    EnterUserProperties((string)emailUsername[emailCredential.text]);
+                }
+                else
+                {
+                    textErrorCredentials.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                textErrorCredentials.gameObject.SetActive(true);
             }
         }
+        
         
     }
 
     public void forgotMyPassword()
     {
+
         regPage1.SetActive(false);
         regPage2.SetActive(true);
         regPage3.SetActive(false);
@@ -64,16 +130,22 @@ public class MenuManager : MonoBehaviour
 
     public void sendPassword()
     {
-        if(emailForPasswordReset.text != "")
+        if(emailForPasswordReset.text == "" || emailForPasswordReset == null)
         {
+            textErrorNoEmail.gameObject.SetActive(true);
+        }
+        else
+        {
+            textErrorNoEmail.gameObject.SetActive(false);
             regPage1.SetActive(false);
             regPage2.SetActive(false);
             regPage3.SetActive(true);
-        }        
+        }
     }
 
     public void tryEnterAgain()
     {
+        textErrorCredentials.gameObject.SetActive(false);
         regPage1.SetActive(true);
         regPage2.SetActive(false);
         regPage3.SetActive(false);
@@ -83,5 +155,72 @@ public class MenuManager : MonoBehaviour
     {
         welcomeUsername.text = string.Concat(welcomeUsername.text, username);
         perfilPage1.SetActive(true);
+    }
+
+    public void showAreaButton(GameObject areaButton)
+    {
+        Debug.Log("Button clicked");
+
+        foreach (GameObject go in areaButtons)
+        {
+            Debug.Log(go.name);
+            if (areaButton.Equals(go))
+            {
+                Debug.Log(go.name);
+                if (areaButton.activeSelf)
+                {
+                    areaButton.SetActive(false);
+                }
+                else
+                {
+                    areaButton.SetActive(true);
+                    umAr.text = (string)umidadeAr[go.name];
+                    umSolo.text = (string)umidadeSolo[go.name];
+                    mmCho.text = (string)mmChovidos[go.name];
+                }
+            }
+            else
+            {
+                go.SetActive(false);
+            }
+        }
+    }
+
+    public void OpenOrClose()
+    {
+        int count = 0;
+        foreach(GameObject go in areaButtons)
+        {
+            if(go.activeSelf == true)
+            {
+                count++;
+                
+            }
+        }
+        if(count > 0)
+        {
+            if (!dataVisualizationLayer.GetBool("Open"))
+            {
+                dataVisualizationLayer.SetBool("Open", true);
+
+            }
+        }
+        else if(count == 0)
+        {
+            if (dataVisualizationLayer.GetBool("Open"))
+            {
+                dataVisualizationLayer.SetBool("Open", false);
+            }
+        }
+        
+    }
+
+    public void EnterProperty()
+    {
+        propertiesPage1.SetActive(true);
+        perfilPage1.SetActive(false);
+        regPage1.SetActive(true);
+        regPage2.SetActive(false);
+        regPage3.SetActive(false);
     }
 }
