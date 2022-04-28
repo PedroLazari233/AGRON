@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,6 +46,15 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     Text umAr, umSolo, mmCho;
 
+    [SerializeField]
+    GameObject dataVisu, details;
+
+    [SerializeField]
+    Text detailUmAr, detailUmSolo, detailMmCho, hintUmAr, hintUmSolo, hintMmCho;
+
+    [SerializeField]
+    Transform buttonDetail;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -80,6 +90,8 @@ public class MenuManager : MonoBehaviour
         mmChovidos.Add("AreaButton(4)", "10 mm");
         mmChovidos.Add("AreaButton(5)", "107 mm");
         mmChovidos.Add("AreaButton(6)", "46 mm");
+
+
 
         regPage1.SetActive(true);
         regPage2.SetActive(false);
@@ -159,11 +171,8 @@ public class MenuManager : MonoBehaviour
 
     public void showAreaButton(GameObject areaButton)
     {
-        Debug.Log("Button clicked");
-
         foreach (GameObject go in areaButtons)
         {
-            Debug.Log(go.name);
             if (areaButton.Equals(go))
             {
                 Debug.Log(go.name);
@@ -177,6 +186,12 @@ public class MenuManager : MonoBehaviour
                     umAr.text = (string)umidadeAr[go.name];
                     umSolo.text = (string)umidadeSolo[go.name];
                     mmCho.text = (string)mmChovidos[go.name];
+
+                    detailUmAr.text = umAr.text;
+                    detailUmSolo.text = umSolo.text;
+                    detailMmCho.text = mmCho.text;
+
+                    Hint(detailUmAr.text, detailUmSolo.text, detailMmCho.text);
                 }
             }
             else
@@ -197,7 +212,7 @@ public class MenuManager : MonoBehaviour
                 
             }
         }
-        if(count > 0)
+        if (count > 0)
         {
             if (!dataVisualizationLayer.GetBool("Open"))
             {
@@ -215,12 +230,77 @@ public class MenuManager : MonoBehaviour
         
     }
 
+    public void ShowDetails()
+    {
+        if (!dataVisualizationLayer.GetBool("ShowDetails") && dataVisualizationLayer.GetBool("Open"))
+        {
+            dataVisualizationLayer.SetBool("ShowDetails", true);
+            dataVisu.SetActive(false);
+            details.SetActive(true);
+
+            buttonDetail.Rotate(0.0f, 0.0f, 180.0f, Space.World);
+        }
+        else if (dataVisualizationLayer.GetBool("ShowDetails") && dataVisualizationLayer.GetBool("Open"))
+        {
+            dataVisualizationLayer.SetBool("ShowDetails", false);
+            dataVisu.SetActive(true);
+            details.SetActive(false);
+
+            buttonDetail.Rotate(0.0f, 0.0f, 180.0f, Space.World);
+        }
+    }
+
     public void EnterProperty()
     {
         propertiesPage1.SetActive(true);
         perfilPage1.SetActive(false);
-        regPage1.SetActive(true);
+        regPage1.SetActive(false);
         regPage2.SetActive(false);
         regPage3.SetActive(false);
+    }
+
+    public void Hint(string hintAr, string hintSolo, string hintMm)
+    {
+        string castedHintAr = hintAr.Remove(hintAr.LastIndexOf('%')).TrimEnd();
+        int intHintAr = Int16.Parse(castedHintAr);
+
+        string castedHintSolo = hintSolo.Remove(hintSolo.LastIndexOf('%')).TrimEnd();
+        int intHintSolo = Int16.Parse(castedHintSolo);
+
+        Debug.Log(hintMm);
+        string castedHintMm1 = hintMm.Remove(hintMm.LastIndexOf('m')).TrimEnd();
+        Debug.Log(castedHintMm1);
+        string castedHintMm2 = castedHintMm1.Remove(castedHintMm1.LastIndexOf('m')).TrimEnd();
+        Debug.Log(castedHintMm2);
+        //string castedHintMm3 = castedHintMm2.Remove(castedHintMm2.LastIndexOf(' ')).TrimEnd();
+        //Debug.Log(castedHintMm3);
+        int intHintMm = Int16.Parse(castedHintMm2);
+
+        if (intHintAr < 50)
+        {
+            hintUmAr.text = "Ruim para Pulverização";
+        }
+        else
+        {
+            hintUmAr.text = "Boa para Pulverização";
+        }
+
+        if (intHintSolo < 50)
+        {
+            hintUmSolo.text = "Seca para Adubagem";
+        }
+        else
+        {
+            hintUmSolo.text = "Úmida para Adubagem";
+        }
+
+        if (intHintMm < 50)
+        {
+            hintMmCho.text = "Necessidade de Irrigar";
+        }
+        else
+        {
+            hintMmCho.text = "Sem Necessidade de Irrigar";
+        }
     }
 }

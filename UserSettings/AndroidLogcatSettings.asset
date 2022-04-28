@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "2a21f9b9fc3f7ece",
         "name": "com.DefaultCompany.AGRONE",
-        "processId": 10584,
+        "processId": 25484,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -36,6 +36,12 @@
             "deviceId": "2a21f9b9fc3f7ece",
             "name": "com.DefaultCompany.AGRONE",
             "processId": 10584,
+            "exited": false
+        },
+        {
+            "deviceId": "2a21f9b9fc3f7ece",
+            "name": "com.DefaultCompany.AGRONE",
+            "processId": 25484,
             "exited": false
         }
     ],
