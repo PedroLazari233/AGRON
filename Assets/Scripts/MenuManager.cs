@@ -166,6 +166,20 @@ public class MenuManager : MonoBehaviour
     public void EnterUserProperties(string username)
     {
         welcomeUsername.text = string.Concat(welcomeUsername.text, username);
+        regPage1.SetActive(false);
+        regPage2.SetActive(false);
+        regPage3.SetActive(false);
+        propertiesPage1.SetActive(false);
+        perfilPage1.SetActive(true);
+    }
+
+    public void BackUserProperties()
+    {
+        //welcomeUsername.text = string.Concat(welcomeUsername.text, username);
+        regPage1.SetActive(false);
+        regPage2.SetActive(false);
+        regPage3.SetActive(false);
+        propertiesPage1.SetActive(false);
         perfilPage1.SetActive(true);
     }
 
@@ -267,13 +281,8 @@ public class MenuManager : MonoBehaviour
         string castedHintSolo = hintSolo.Remove(hintSolo.LastIndexOf('%')).TrimEnd();
         int intHintSolo = Int16.Parse(castedHintSolo);
 
-        Debug.Log(hintMm);
         string castedHintMm1 = hintMm.Remove(hintMm.LastIndexOf('m')).TrimEnd();
-        Debug.Log(castedHintMm1);
         string castedHintMm2 = castedHintMm1.Remove(castedHintMm1.LastIndexOf('m')).TrimEnd();
-        Debug.Log(castedHintMm2);
-        //string castedHintMm3 = castedHintMm2.Remove(castedHintMm2.LastIndexOf(' ')).TrimEnd();
-        //Debug.Log(castedHintMm3);
         int intHintMm = Int16.Parse(castedHintMm2);
 
         if (intHintAr < 50)
